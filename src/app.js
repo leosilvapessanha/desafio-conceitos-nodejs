@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const repositories = [];
+var repositories = [];
 
 app.get("/repositories", (request, response) => {
   return response.status(200).json(repositories);
@@ -28,7 +28,26 @@ app.post("/repositories", (request, response) => {
 });
 
 app.put("/repositories/:id", (request, response) => {
-  // TODO
+  const { id } = request.params;
+  const { title = '', url = '', techs = [] } = request.body;
+  const repository = repositories.find(repository => repository.id === id);
+  if (!repository)
+    return response.status(400).json({
+      message: 'repository not found'
+    });
+  const updatedRepository = {
+    ...repository,
+    title,
+    url,
+    techs
+  };
+  repositories = repositories.map(repository => {
+    if (repository.id === id)
+      return updatedRepository;
+    else
+      return repository;
+  });
+  return response.status(200).json(updatedRepository);
 });
 
 app.delete("/repositories/:id", (request, response) => {
