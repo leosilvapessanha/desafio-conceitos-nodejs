@@ -11,7 +11,7 @@ app.use(cors());
 const repositories = [];
 
 app.get("/repositories", (request, response) => {
-  // TODOS
+  return response.status(200).json(repositories);
 });
 
 app.post("/repositories", (request, response) => {
