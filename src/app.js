@@ -51,7 +51,17 @@ app.put("/repositories/:id", (request, response) => {
 });
 
 app.delete("/repositories/:id", (request, response) => {
-  // TODO
+  const { id } = request.params;
+  const repository = repositories.find(repository => repository.id === id);
+  if (!repository)
+    return response.status(400).json({
+      message: 'repository not found'
+    });
+  const filteredRepositories = repositories.filter(repository => repository.id !== id);
+  repositories = filteredRepositories;
+  return response.status(204).json({
+    message: 'repository has been successfully deleted'
+  });
 });
 
 app.post("/repositories/:id/like", (request, response) => {
